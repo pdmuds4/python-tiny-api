@@ -22,3 +22,6 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/python_tiny_api"]
+
+[tool.rye.scripts]
+dev = "python main.py"
