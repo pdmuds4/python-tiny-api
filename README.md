@@ -8,10 +8,12 @@ A simple Python API client for Tiny API.
 
 ```bash
 $ rye sync
+$ rye run dev
 ```
 
 ### If you don't have `rye` installed and want to use `pip` instead, you can run:
 
 ```bash
 $ pip install -r requirements.txt
+$ python -m application.py
 ```
