@@ -32,3 +32,4 @@ packages = ["src/python_tiny_api"]
 
 [tool.rye.scripts]
 dev = "python application.py"
+test = "pytest -s"
