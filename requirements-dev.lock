@@ -21,11 +21,19 @@ h11==0.16.0
     # via uvicorn
 idna==3.10
     # via anyio
+iniconfig==2.1.0
+    # via pytest
+packaging==25.0
+    # via pytest
+pluggy==1.6.0
+    # via pytest
 pydantic==2.11.5
     # via fastapi
     # via python-tiny-api
 pydantic-core==2.33.2
     # via pydantic
+pytest==8.3.5
+python-dotenv==1.1.0
 sniffio==1.3.1
     # via anyio
 starlette==0.46.2
