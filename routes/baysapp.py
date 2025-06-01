@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 import MeCab
 from clients import SqliteClient
+from model._error import BaseError
 
 from model.baysapp.valueObject import *
 from model.baysapp.dto import *
@@ -26,24 +27,44 @@ async def bays():
 
 @router.post("/baysapp/predict_naive", tags=["baysapp"], response_model=PredictNaiveResponseModel)
 async def naive(req: PredictNaiveRequestModel):
-    request = PredictNaiveRequestDTO(
-        sentence=Sentence(value=req.sentence)
-    )
+    try:
+        request = PredictNaiveRequestDTO(
+            sentence=Sentence(value=req.sentence)
+        )
 
-    words = ParseWordsUseCase(
-        client=MeCab.Tagger(),
-        request=request
-    ).execute()
+        words = ParseWordsUseCase(
+            client=MeCab.Tagger(),
+            request=request
+        ).execute()
 
-    predict = PredictNaiveUseCase(
-        repository=work_repository,
-        request=words 
-    ).execute()
-    
-    return PredictNaiveResponseModel(
-        weather=predict.weather.value,
-        life=predict.life.value,
-        sports=predict.sports.value,
-        culture=predict.culture.value,
-        economy=predict.economy.value
-    )
+        predict = PredictNaiveUseCase(
+            repository=work_repository,
+            request=words 
+        ).execute()
+        
+        return PredictNaiveResponseModel(
+            weather=predict.weather.value,
+            life=predict.life.value,
+            sports=predict.sports.value,
+            culture=predict.culture.value,
+            economy=predict.economy.value
+        )
+    except Exception as e:
+        if isinstance(e, BaseError):
+            return JSONResponse(
+                status_code=e.status_code,
+                content={
+                    "message": e.message,
+                    "detail": e.detail,
+                    "level": e.level
+                }
+            )
+        else:
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "message": "An unexpected error occurred.",
+                    "detail": str(e),
+                    "level": "unknown"
+                }
+            )
