@@ -118,5 +118,7 @@ typing-inspection==0.4.1
     # via pydantic
 tzdata==2025.2
     # via pandas
+unidic-lite==1.0.8
+    # via python-tiny-api
 uvicorn==0.34.2
     # via python-tiny-api
