@@ -1,3 +1,1 @@
 from .parse_words import ParseWordsService
-from .get_news_category_prob import GetNewsCategoryProbService
-from .get_laplace_smoothing_prob import GetLaplaceSmoothingProbService
