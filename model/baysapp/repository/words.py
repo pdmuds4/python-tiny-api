@@ -1,82 +1,62 @@
 from clients import SqliteClient
 
-from ..._abstruct.repository import RepositoryModel
 from ..._error.repository import RepositoryError
 
-from ...baysapp.valueObject import Word, Score
+from ...baysapp.valueObject import Word, Score, NewsCategories
 
 
-class WordsRepository(RepositoryModel):
+class WordsRepository:
     client: SqliteClient
 
     def __init__(self, client: SqliteClient):
         self.client = client
         self.cursor = client.cursor()
 
-    def get_news_category_score(self, request: Word) -> list[Score] | None:
-        table_name = self.client.table_name
-        word = request.value
-
+    def get_news_category_score(self, word: Word, news_category: NewsCategories) -> Score | None:
         try:
             self.cursor.execute(
                 f"""
                     SELECT
-                        CAST((SELECT weather FROM {table_name} WHERE word='{word}') AS REAL) /
-                        CAST(SUM(weather) AS REAL),
-                        CAST((SELECT life FROM {table_name} WHERE word='{word}') AS REAL) /
-                        CAST(SUM(life) AS REAL),
-                        CAST((SELECT sports FROM {table_name} WHERE word='{word}') AS REAL) /
-                        CAST(SUM(sports) AS REAL),
-                        CAST((SELECT culture FROM {table_name} WHERE word='{word}') AS REAL) /
-                        CAST(SUM(culture) AS REAL),
-                        CAST((SELECT economy FROM {table_name} WHERE word='{word}') AS REAL) /
-                        CAST(SUM(economy) AS REAL)
-                    FROM {table_name};
+                        CAST((
+                            SELECT {news_category.value} 
+                            FROM {self.client.table_name} 
+                            WHERE word='{word.value}'
+                        ) AS REAL) /
+                        CAST((
+                            SELECT SUM({news_category.value}) 
+                            FROM {self.client.table_name}
+                        ) AS REAL)
+                    FROM {self.client.table_name};
                 """
             )
         except Exception as e:
             raise RepositoryError(
-                message = "SQLiteのクエリ実行中にエラーが発生しました。",
+                message = f"SQLiteのクエリ実行中にエラーが発生しました。: {str(e)}",
                 detail=str(e),
                 status_code=500
             )
 
         result = self.cursor.fetchone()
 
-        if result[0] is None:
-            return None
+        if result[0]:
+            return Score(value=result[0])
         else:
-            return [Score(value=prob) for prob in result]
-        
-    
-    def get_laplace_smoothing_score(self) -> list[Score] | None:
-        table_name = self.client.table_name
+            return self.get_laplace_smoothing_score(news_category)
 
+
+    def get_laplace_smoothing_score(self, news_category: NewsCategories) -> Score | None:
         try:
             self.cursor.execute(
                 f"""
                     SELECT
                         1 / CAST(
-                            SUM(weather) + 
-                            (SELECT COUNT(*) FROM {table_name} WHERE weather != 0) AS REAL
-                        ),
-                        1 / CAST(
-                            SUM(life) + 
-                            (SELECT COUNT(*) FROM {table_name} WHERE life != 0) AS REAL
-                        ),
-                        1 / CAST(
-                            SUM(sports) + 
-                            (SELECT COUNT(*) FROM {table_name} WHERE sports != 0) AS REAL
-                        ),
-                        1 / CAST(
-                            SUM(culture) + 
-                            (SELECT COUNT(*) FROM {table_name} WHERE culture != 0) AS REAL
-                        ),
-                        1 / CAST(
-                            SUM(economy) + 
-                            (SELECT COUNT(*) FROM {table_name} WHERE economy != 0) AS REAL
+                            SUM({news_category.value}) + (
+                                SELECT COUNT(*) 
+                                FROM {self.client.table_name} 
+                                WHERE {news_category.value} != 0
+                            ) AS REAL
                         )
-                    FROM {table_name};
+                    FROM {self.client.table_name};
                 """
             )
         except Exception as e:
@@ -87,8 +67,4 @@ class WordsRepository(RepositoryModel):
             )
 
         result = self.cursor.fetchone()
-
-        if result[0] is None:
-            return None
-        else:
-            return [Score(value=prob) for prob in result]
+        return Score(value=result[0])
