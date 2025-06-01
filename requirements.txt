@@ -3,3 +3,7 @@ uvicorn
 pydantic
 python-dotenv
 pytest
+mecab-python3
+pgmpy
+pandas
+numpy
