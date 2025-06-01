@@ -1,6 +1,7 @@
 from MeCab import Tagger
 
-from ..._abstruct.usecase import UseCaseModel
+from ..._abstruct import UseCaseModel
+from ..._error import UseCaseError
 from ..valueObject import Word
 from ..dto import PredictNaiveRequestDTO
 
@@ -14,7 +15,14 @@ class ParseWordsUseCase(UseCaseModel):
         self.request = request
 
     def execute(self) -> list[Word]:
-        node = self.client.parseToNode(self.request.sentence.value)
+        try:
+            node = self.client.parseToNode(self.request.sentence.value)
+        except Exception as e:
+            raise UseCaseError(
+                message="MeCabの解析中にエラーが発生しました。",
+                detail=str(e),
+                status_code=500
+            )
 
         words = []
         while node:

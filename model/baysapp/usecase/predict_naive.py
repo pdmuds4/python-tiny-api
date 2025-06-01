@@ -1,8 +1,8 @@
 import numpy as np
 from typing import get_args
 
-from ..._abstruct.usecase import UseCaseModel
-
+from ..._abstruct import UseCaseModel
+from ..._error import UseCaseError
 from ..valueObject import NewsCategories, Score, Word
 from ..dto import PredictNaiveResponseDTO
 from ..repository import WordsRepository

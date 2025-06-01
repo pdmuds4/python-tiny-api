@@ -1,5 +1,5 @@
 from ..._abstruct import EntityModel
-from ...baysapp.valueObject import Sentence, Score
+from ..valueObject import Sentence, Score
 
 
 class PredictNaiveRequestModel(EntityModel):

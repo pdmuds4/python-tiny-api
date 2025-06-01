@@ -1,8 +1,7 @@
 from clients import SqliteClient
 
-from ..._error.repository import RepositoryError
-
-from ...baysapp.valueObject import Word, Score, NewsCategories
+from ..._error import RepositoryError
+from ..valueObject import Word, Score, NewsCategories
 
 
 class WordsRepository:
