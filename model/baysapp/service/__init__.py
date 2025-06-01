@@ -1,1 +1,2 @@
 from .parse_words import ParseWordsService
+from .get_news_category_prob import GetNewsCategoryProbService
