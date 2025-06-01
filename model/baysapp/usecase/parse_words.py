@@ -1,19 +1,20 @@
 from MeCab import Tagger
 
-from ..._abstruct.service import ServiceModel
-from ...baysapp.valueObject import Sentence, Word
+from ..._abstruct.usecase import UseCaseModel
+from ..valueObject import Word
+from ..dto import PredictNaiveRequestDTO
 
 
-class ParseWordsService(ServiceModel):
+class ParseWordsUseCase(UseCaseModel):
     client: Tagger
-    request: Sentence
+    request: PredictNaiveRequestDTO
 
-    def __init__(self, client: Tagger, request: Sentence):
+    def __init__(self, client: Tagger, request: PredictNaiveRequestDTO):
         self.client = client
         self.request = request
 
     def execute(self) -> list[Word]:
-        node = self.client.parseToNode(self.request.value)
+        node = self.client.parseToNode(self.request.sentence.value)
 
         words = []
         while node:

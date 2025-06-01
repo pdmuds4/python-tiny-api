@@ -3,25 +3,22 @@ from typing import get_args
 
 from ..._abstruct.usecase import UseCaseModel
 
-from ..valueObject import NewsCategories, Score
+from ..valueObject import NewsCategories, Score, Word
 from ..dto import PredictNaiveResponseDTO
-from ..service import ParseWordsService
 from ..repository import WordsRepository
 
 class PredictNaiveUseCase(UseCaseModel):
-    parsePaseWordsService: ParseWordsService
     repository: WordsRepository
 
     def __init__(self, 
-        parsePaseWordsService: ParseWordsService,
-        repository: WordsRepository
+        repository: WordsRepository,
+        request: list[Word]
     ):
-        self.parsePaseWordsService = parsePaseWordsService
         self.repository = repository
+        self.request = request
 
     
     def execute(self) -> PredictNaiveResponseDTO:
-        words = self.parsePaseWordsService.execute()
         categories = [NewsCategories(value=c) for c in get_args(NewsCategories.model_fields['value'].annotation)]
 
         scores = [
@@ -29,7 +26,7 @@ class PredictNaiveUseCase(UseCaseModel):
                 np.prod([score.value for score in
                     [
                         self.repository.get_news_category_score(word, category)
-                        for word in words
+                        for word in self.request
                     ]
                 ])
             ) for category in categories
