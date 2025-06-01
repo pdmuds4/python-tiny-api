@@ -1,1 +1,1 @@
-from .predict_naive import PredictNaiveRequestDTO, PredictNaiveResponseDTO
+from .predict_naive import *

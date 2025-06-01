@@ -24,10 +24,10 @@ async def bays():
     return JSONResponse({ "message": "This is/baysapp router!" })
 
 
-@router.post("/baysapp/naive_bayse", tags=["baysapp"], response_model=PredictNaiveResponseDTO)
-async def naive(req: PredictNaiveRequestDTO):
+@router.post("/baysapp/predict_naive", tags=["baysapp"], response_model=PredictNaiveResponseModel)
+async def naive(req: PredictNaiveRequestModel):
     request = PredictNaiveRequestDTO(
-        sentence=Sentence(value=req.sentence.value)
+        sentence=Sentence(value=req.sentence)
     )
 
     words = ParseWordsUseCase(
@@ -40,4 +40,10 @@ async def naive(req: PredictNaiveRequestDTO):
         request=words 
     ).execute()
     
-    return predict
+    return PredictNaiveResponseModel(
+        weather=predict.weather.value,
+        life=predict.life.value,
+        sports=predict.sports.value,
+        culture=predict.culture.value,
+        economy=predict.economy.value
+    )
