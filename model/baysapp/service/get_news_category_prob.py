@@ -7,9 +7,10 @@ class GetNewsCategoryProbService(ServiceModel):
     client: SqliteClient
     request: Word
 
-    def __init__(self, client: SqliteClient, word: Word):
-        super().__init__(client=client, request=word)
-        self.cursor = self.client.cursor()
+    def __init__(self, client: SqliteClient, request: Word):
+        self.client = client
+        self.cursor = client.cursor()
+        self.request = request
 
 
     def execute(self) -> list[Score] | None:

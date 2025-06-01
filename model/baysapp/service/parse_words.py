@@ -5,9 +5,12 @@ from ...baysapp.valueObject import Sentence, Word
 
 
 class ParseWordsService(ServiceModel):
-    def __init__(self, mecab_tagger: Tagger, sentence: Sentence):
-        super().__init__(client=mecab_tagger, request=sentence)
+    client: Tagger
+    request: Sentence
 
+    def __init__(self, client: Tagger, request: Sentence):
+        self.client = client
+        self.request = request
 
     def execute(self) -> list[Word]:
         node = self.client.parseToNode(self.request.value)

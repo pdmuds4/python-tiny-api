@@ -7,8 +7,8 @@ class GetLaplaceSmoothingProbService(ServiceModel):
     client: SqliteClient
 
     def __init__(self, client: SqliteClient):
-        super().__init__(client=client, request=None)
-        self.cursor = self.client.cursor()
+        self.client = client
+        self.cursor = client.cursor()
 
 
     def execute(self) -> list[Score] | None:
