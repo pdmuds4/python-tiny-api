@@ -1,6 +1,3 @@
-from pydantic import field_validator
-from typing import Literal
-
 from ..._abstruct import EntityModel
 from ...baysapp.valueObject import Word, Appearance
 
