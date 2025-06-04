@@ -9,6 +9,6 @@ class Score(ValueObjectModel):
     @field_validator("value")
     def check_value(cls, v):
         if v < 0: raise ValueObjectError("0以下のスコアが検出されました。0以上1以下の値を指定してください。")
-        if v > 100: raise ValueObjectError("100を超過するスコアが検出されました。0以上100以下の値を指定してください。")
+        if v > 1: raise ValueObjectError("100を超過するスコアが検出されました。0以上1以下の値を指定してください。")
         
         return v
