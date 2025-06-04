@@ -1,2 +1,1 @@
 from .predict_naive import PredictNaiveUseCase
-from .parse_words import ParseWordsUseCase

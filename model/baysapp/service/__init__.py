@@ -1,0 +1,2 @@
+from .parse_words import ParseWordsService
+from .predict_naive import PredictNaiveService

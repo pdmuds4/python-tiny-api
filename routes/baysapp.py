@@ -8,11 +8,13 @@ import MeCab
 from clients import SqliteClient
 from model._error import BaseError
 
-from model.baysapp.valueObject import *
 from model.baysapp.dto import *
+from model.baysapp.payload import *
+
+from model.baysapp.valueObject import *
 from model.baysapp.repository import *
 from model.baysapp.usecase import *
-
+from model.baysapp.service import *
 
 router = APIRouter()
 
@@ -25,29 +27,30 @@ async def bays():
     return JSONResponse({ "message": "This is/baysapp router!" })
 
 
-@router.post("/baysapp/predict_naive", tags=["baysapp"], response_model=PredictNaiveResponseModel)
-async def naive(req: PredictNaiveRequestModel):
+@router.post("/baysapp/predict_naive", tags=["baysapp"], response_model=PredictNaiveResponsePayload)
+async def naive(req: PredictNaiveRequestPayload):
     try:
         request = PredictNaiveRequestDTO(
             sentence=Sentence(value=req.sentence)
         )
 
-        words = ParseWordsUseCase(
-            client=MeCab.Tagger(),
-            request=request
-        ).execute()
+        parseWordsService = ParseWordsService(client=MeCab.Tagger())
+        predictNaiveService = PredictNaiveService(repository=work_repository)
 
-        predict = PredictNaiveUseCase(
-            repository=work_repository,
-            request=words 
-        ).execute()
+        predictNaiveUseCase = PredictNaiveUseCase(
+            request=request,
+            parseWordsService=parseWordsService,
+            predictNaiveService=predictNaiveService
+        )
+
+        response = predictNaiveUseCase.execute()
         
-        return PredictNaiveResponseModel(
-            weather=predict.weather.value,
-            life=predict.life.value,
-            sports=predict.sports.value,
-            culture=predict.culture.value,
-            economy=predict.economy.value
+        return PredictNaiveResponsePayload(
+            weather=response.weather.value,
+            life=response.life.value,
+            sports=response.sports.value,
+            culture=response.culture.value,
+            economy=response.economy.value
         )
     except Exception as e:
         if isinstance(e, BaseError):

@@ -40,10 +40,10 @@ class WordsRepository:
         if result[0]:
             return Score(value=result[0])
         else:
-            return self.get_laplace_smoothing_score(news_category)
+            return None
 
 
-    def get_laplace_smoothing_score(self, news_category: NewsCategories) -> Score | None:
+    def get_laplace_smoothing_score(self, news_category: NewsCategories) -> Score:
         try:
             self.cursor.execute(
                 f"""

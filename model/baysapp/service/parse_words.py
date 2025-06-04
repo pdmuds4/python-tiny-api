@@ -1,22 +1,19 @@
 from MeCab import Tagger
 
-from ..._abstruct import UseCaseModel
+from ..._abstruct import ServiceModel
 from ..._error import UseCaseError
-from ..valueObject import Word
-from ..dto import PredictNaiveRequestDTO
+from ..valueObject import Word, Sentence
 
 
-class ParseWordsUseCase(UseCaseModel):
+class ParseWordsService(ServiceModel):
     client: Tagger
-    request: PredictNaiveRequestDTO
 
-    def __init__(self, client: Tagger, request: PredictNaiveRequestDTO):
+    def __init__(self, client: Tagger):
         self.client = client
-        self.request = request
 
-    def execute(self) -> list[Word]:
+    def execute(self, request: Sentence) -> list[Word]:
         try:
-            node = self.client.parseToNode(self.request.sentence.value)
+            node = self.client.parseToNode(request.value)
         except Exception as e:
             raise UseCaseError(
                 message="MeCabの解析中にエラーが発生しました。",
