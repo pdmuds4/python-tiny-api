@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
 
+from routes import *
+
 app = FastAPI()
 
 app.add_middleware(
@@ -16,6 +18,9 @@ app.add_middleware(
 @app.get("/", tags=["root"])
 async def route():
     return JSONResponse({ "message": 'This is python-tiny-api!' })
+
+
+app.include_router(baysAppRouter)
 
 
 if __name__=="__main__":

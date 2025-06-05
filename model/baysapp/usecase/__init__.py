@@ -1,0 +1,2 @@
+from .predict_naive import PredictNaiveUseCase
+from .predict_network import PredictNetworkUseCase
