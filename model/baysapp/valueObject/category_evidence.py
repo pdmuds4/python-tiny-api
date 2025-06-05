@@ -11,3 +11,4 @@ class CategoryEvidence(ValueObjectModel):
     def check_value(cls, v):
         if v < 0 or v > 9:
             raise ValueObjectError("範囲外のカテゴリーを検出しました。0~9の整数値を入力してください。")
+        return v

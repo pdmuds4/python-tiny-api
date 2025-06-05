@@ -11,3 +11,4 @@ class TimeEvidence(ValueObjectModel):
     def check_value(cls, v):
         if v < 0 or v > 3:
             raise ValueObjectError("範囲外の時間帯を検出しました。0~3の整数値を入力してください。")
+        return v
