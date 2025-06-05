@@ -7,4 +7,4 @@ services:
       - "5001:5000"
     volumes:
       - .:/app
-    command: uvicorn application:app --host=0.0.0.0 --port=5000 --reload
+    command: uvicorn application:app --host=0.0.0.0 --port=5001 --reload
