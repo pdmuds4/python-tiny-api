@@ -2,6 +2,7 @@ import numpy as np
 from pgmpy.inference import VariableElimination
 
 from ..._abstruct import ServiceModel
+from ..._error import ServiceError
 from ..valueObject import PredictTypes, Score
 from ..entity import EvidenceEntity
 
@@ -19,5 +20,12 @@ class PredictNetworkService(ServiceModel):
             if evidence is not None and type != predict_type.value
         }
 
-        result = self.client.query([predict_type.value], evidence_dict).values
+        try:
+            result = self.client.query([predict_type.value], evidence_dict).values
+        except Exception as e:
+            raise ServiceError(
+                message="pgmpy.inference.VariableEliminationの実行中にエラーが発生しました",
+                detail=str(e),
+                status_code=500
+            )
         return [Score(value=v) for v in result]
