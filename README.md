@@ -23,3 +23,12 @@ $ pip install -r requirements.txt
 
 * `rye run dev` - Run the application.
 * `rye run test` - Run the /tests.
+
+
+## Docker
+
+``` bash
+$ docker-compose up --build
+$ docker-compose up
+$ docker-compose down
+```
