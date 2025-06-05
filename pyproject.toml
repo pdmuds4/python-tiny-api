@@ -8,6 +8,12 @@ authors = [
 dependencies = [
     "uvicorn>=0.34.2",
     "fastapi>=0.115.12",
+    "pydantic>=2.11.5",
+    "mecab-python3>=1.0.10",
+    "pgmpy>=1.0.0",
+    "pandas>=2.2.3",
+    "numpy>=2.2.6",
+    "unidic-lite>=1.0.8",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -18,7 +24,10 @@ build-backend = "hatchling.build"
 
 [tool.rye]
 managed = true
-dev-dependencies = []
+dev-dependencies = [
+    "python-dotenv>=1.1.0",
+    "pytest>=8.3.5",
+]
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -28,3 +37,4 @@ packages = ["src/python_tiny_api"]
 
 [tool.rye.scripts]
 dev = "python application.py"
+test = "pytest -s"
