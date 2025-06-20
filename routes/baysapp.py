@@ -31,7 +31,7 @@ network_infer = VariableElimination(network_model)
 
 @router.get("/baysapp", tags=["baysapp"])
 async def bays():
-    return JSONResponse({ "message": "This is/baysapp router!" })
+    return JSONResponse({ "message": "This is /baysapp router!" })
 
 
 @router.post("/baysapp/predict_naive", tags=["baysapp"], response_model=PredictNaiveResponsePayload)
