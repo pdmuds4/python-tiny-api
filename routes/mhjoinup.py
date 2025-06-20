@@ -29,7 +29,7 @@ async def mhjoinup():
 @router.post("/mhjoinup/emit_webhook", tags=["mh-joinup"], response_model=EmitWebhookResponsePayload)
 async def emit_webhook(request: EmitWebhookRequestPayload):
     try:
-        request = EmitWebhookRequestDTO(
+        request_dto = EmitWebhookRequestDTO(
             videoId=YoutubeId(value=request.videoId),
             chatMessages=[
                 ChatMessageEntity(
@@ -41,7 +41,7 @@ async def emit_webhook(request: EmitWebhookRequestPayload):
             ]
         )
 
-        emitWebhookUseCase = EmitWebhookUseCase(request=request)
+        emitWebhookUseCase = EmitWebhookUseCase(request=request_dto)
         response = emitWebhookUseCase.execute()
 
         response_payload = EmitWebhookResponsePayload(
@@ -56,6 +56,7 @@ async def emit_webhook(request: EmitWebhookRequestPayload):
             ]
         )
 
+        await sio.emit(request.videoId, response_payload.model_dump())
 
         return response_payload
     except Exception as e:
