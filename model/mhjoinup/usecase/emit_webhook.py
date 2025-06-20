@@ -14,7 +14,8 @@ class EmitWebhookUseCase(UseCaseModel):
             ChatDataEntity(
                 message=message.displayMessage,
                 name=message.displayName,
-                avatar=message.photoUrl
+                avatar=message.photoUrl,
+                channel_id=message.platformAudienceId
             ) for message in self.request.chatMessages
         ]
         

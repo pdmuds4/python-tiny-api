@@ -10,6 +10,6 @@ class YoutubeId(ValueObjectModel):
     @field_validator("value")
     def check_value(cls, v):
         if len(v) != 11:                           raise ValueObjectError("YoutubeIdは11文字固定長です。")
-        if not re.match(r"/^[A-Za-z0-9_-]+$/", v): raise ValueObjectError("YoutubeIdは半角英数字、アンダースコア、ハイフンのみ使用可能です")
+        if not re.match(r'^[A-Za-z0-9_-]+$', v): raise ValueObjectError("YoutubeIdは半角英数字、アンダースコア、ハイフンのみ使用可能です")
         
         return v
