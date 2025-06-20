@@ -6,3 +6,9 @@ class ChatMessageEntity(EntityModel):
     displayMessage: Message
     displayName: UserName
     photoUrl: UserAvatar
+
+
+class ChatMessageEntityTypes(EntityModel):
+    displayMessage: str
+    displayName: str
+    photoUrl: str
