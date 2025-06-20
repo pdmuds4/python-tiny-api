@@ -4,7 +4,7 @@ from ..._abstruct import ValueObjectModel
 from ..._error import ValueObjectError
 
 
-class ChatMessage(ValueObjectModel):
+class Message(ValueObjectModel):
     value: str
 
     @field_validator("value")
