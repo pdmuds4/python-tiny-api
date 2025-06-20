@@ -36,95 +36,54 @@ async def bays():
 
 @router.post("/baysapp/predict_naive", tags=["baysapp"], response_model=PredictNaiveResponsePayload)
 async def naive(req: PredictNaiveRequestPayload):
-    try:
-        request = PredictNaiveRequestDTO(
-            sentence=Sentence(value=req.sentence)
-        )
+    request = PredictNaiveRequestDTO(
+        sentence=Sentence(value=req.sentence)
+    )
 
-        parseWordsService = ParseWordsService(client=MeCab.Tagger())
-        predictNaiveService = PredictNaiveService(repository=work_repository)
+    parseWordsService = ParseWordsService(client=MeCab.Tagger())
+    predictNaiveService = PredictNaiveService(repository=work_repository)
 
-        predictNaiveUseCase = PredictNaiveUseCase(
-            request=request,
-            parseWordsService=parseWordsService,
-            predictNaiveService=predictNaiveService
-        )
+    predictNaiveUseCase = PredictNaiveUseCase(
+        request=request,
+        parseWordsService=parseWordsService,
+        predictNaiveService=predictNaiveService
+    )
 
-        response = predictNaiveUseCase.execute()
-        
-        return PredictNaiveResponsePayload(
-            weather=response.weather.value,
-            life=response.life.value,
-            sports=response.sports.value,
-            culture=response.culture.value,
-            economy=response.economy.value
-        )
-    except Exception as e:
-        if isinstance(e, BaseError):
-            return JSONResponse(
-                status_code=e.status_code,
-                content={
-                    "message": e.message,
-                    "detail": e.detail,
-                    "level": e.level
-                }
-            )
-        else:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "message": "An unexpected error occurred.",
-                    "detail": str(e),
-                    "level": "unknown"
-                }
-            )
+    response = predictNaiveUseCase.execute()
+    
+    return PredictNaiveResponsePayload(
+        weather=response.weather.value,
+        life=response.life.value,
+        sports=response.sports.value,
+        culture=response.culture.value,
+        economy=response.economy.value
+    )
 
 
 @router.post("/baysapp/predict_network", tags=["baysapp"], response_model=PredictNetworkResponsePayload)
 async def network(req: PredictNetworkRequestPayload):
-    try:
-        request = PredictNetworkRequestDTO(
-            type=PredictTypes(value=req.type),
-            evidence=EvidenceEntity(
-                category=CategoryEvidence(value=req.evidence.category),
-                sex=SexEvidence(value=req.evidence.sex),
-                time=TimeEvidence(value=req.evidence.time),
-                use_time=UseTimeEvidence(value=req.evidence.use_time)
-            )
+    request = PredictNetworkRequestDTO(
+        type=PredictTypes(value=req.type),
+        evidence=EvidenceEntity(
+            category=CategoryEvidence(value=req.evidence.category),
+            sex=SexEvidence(value=req.evidence.sex),
+            time=TimeEvidence(value=req.evidence.time),
+            use_time=UseTimeEvidence(value=req.evidence.use_time)
         )
-        
-        predictNetworkService = PredictNetworkService(client=network_infer)
+    )
+    
+    predictNetworkService = PredictNetworkService(client=network_infer)
 
-        predictNetworkUseCase = PredictNetworkUseCase(
-            request=request,
-            predictNetworkService=predictNetworkService
-        )
+    predictNetworkUseCase = PredictNetworkUseCase(
+        request=request,
+        predictNetworkService=predictNetworkService
+    )
 
-        response = predictNetworkUseCase.execute()
+    response = predictNetworkUseCase.execute()
 
-        return PredictNetworkResponsePayload(
-            type=response.type.value,
-            score={
-                category: score["value"] for category, score in response.score.model_dump().items()
-            }
-        )
-
-    except Exception as e:
-        if isinstance(e, BaseError):
-            return JSONResponse(
-                status_code=e.status_code,
-                content={
-                    "message": e.message,
-                    "detail": e.detail,
-                    "level": e.level
-                }
-            )
-        else:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "message": "An unexpected error occurred.",
-                    "detail": str(e),
-                    "level": "unknown"
-                }
-            )
+    return PredictNetworkResponsePayload(
+        type=response.type.value,
+        score={
+            category: score["value"] for category, score in response.score.model_dump().items()
+        }
+    )
