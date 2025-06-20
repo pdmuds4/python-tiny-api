@@ -17,6 +17,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/socket.io", mhJoinUpSocketApp)
+
+
 @app.middleware("http")
 async def api_key_authentication(request: Request, call_next):
     api_key = os.getenv("API_KEY")
@@ -45,6 +48,7 @@ async def route():
 
 
 app.include_router(baysAppRouter)
+app.include_router(mhJoinUpRouter)
 
 
 if __name__=="__main__":
