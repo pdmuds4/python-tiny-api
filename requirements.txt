@@ -8,3 +8,4 @@ pgmpy
 pandas
 numpy
 unidic-lite
+python-socketio
