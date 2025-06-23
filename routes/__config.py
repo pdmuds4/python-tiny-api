@@ -3,6 +3,7 @@ config = {
         "/",
         "/docs", 
         "/openapi.json",
+        "/mhjoinup/emit_webhook",
         "/socket.io/mhjoinup/",
     ]
 }
