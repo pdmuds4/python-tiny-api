@@ -4,8 +4,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from model._error import BaseError
-
 from model.mhjoinup.dto import *
 from model.mhjoinup.payload import *
 
@@ -18,7 +16,7 @@ sio = socketio.AsyncServer(
     async_mode='asgi'
 )
 
-socket_app = socketio.ASGIApp(sio)
+socket_app = socketio.ASGIApp(sio, socketio_path="/socket.io/mhjoinup")
 
 
 @router.get("/mhjoinup", tags=["mh-joinup"])
@@ -55,16 +53,20 @@ async def emit_webhook(request: EmitWebhookRequestPayload):
         ]
     )
 
-    await sio.emit(request.videoId, response_payload.model_dump())
+    await sio.emit(
+        request.videoId,
+        response_payload.model_dump(),
+        namespace='/castcraft_webhook'
+    )
 
     return response_payload
 
 
-@sio.on('connect')
+@sio.on('connect', namespace='/castcraft_webhook')
 async def socket_connect(sid, env):
     print(f"Client {sid} connected")
 
 
-@sio.on('disconnect')
+@sio.on('disconnect', namespace='/castcraft_webhook')
 async def socket_disconnect(sid):
     print(f"Client {sid} disconnected")

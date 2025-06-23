@@ -28,7 +28,12 @@ async def api_key_authentication(request: Request, call_next):
     try:
         match api_key_auth:
             case "true":
-                if request.url.path in config["aka_ignore_paths"] or request.headers.get("X-API-KEY") == api_key:
+                is_ignore_path = request.url.path in config["aka_ignore_paths"]
+                is_ignore_root_path = any([request.url.path.startswith(like_path[0:-1]) for like_path in [path for path in config["aka_ignore_paths"] if path.endswith('*')]])
+
+                if request.headers.get("X-API-KEY") == api_key:
+                    return await call_next(request)
+                elif is_ignore_path or is_ignore_root_path:
                     return await call_next(request)
                 else:
                     return JSONResponse(
