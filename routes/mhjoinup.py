@@ -1,7 +1,7 @@
 import sys, os, socketio
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Path
 from fastapi.responses import JSONResponse
 
 from model.mhjoinup.dto import *
@@ -59,6 +59,39 @@ async def emit_webhook(request: EmitWebhookRequestPayload):
         namespace='/castcraft_webhook'
     )
 
+    return response_payload
+
+
+@router.post("/mhjoinup/emit_management/{user_id}", tags=["mh-joinup"], response_model=EmitManagementPayload)
+async def emit_management(
+    user_id: str = Path(...), 
+    request: EmitManagementPayload = ...
+):
+    request_dto = EmitManagementDTO(
+        user_id=UserId(value=user_id),
+        joiner=[ManageInstantEntity(
+            name=UserName(value=j.name), 
+            avatar=UserAvatar(value=j.avatar), 
+            quest=UserQuest(value=j.quest)
+        ) for j in request.joiner],
+        waiter=[ManageInstantEntity(
+            name=UserName(value=w.name), 
+            avatar=UserAvatar(value=w.avatar),
+            quest=UserQuest(value=w.quest)
+        ) for w in request.waiter],
+    )
+
+    response_payload = EmitManagementPayload(
+        joiner=[{k: v["value"] for [k, v] in j.model_dump().items()} for j in request_dto.joiner],
+        waiter=[{k: v["value"] for [k, v] in w.model_dump().items()} for w in request_dto.waiter]
+    )
+
+    await sio.emit(
+        user_id,
+        response_payload,
+        namespace='/board_management'
+    )
+    
     return response_payload
 
 

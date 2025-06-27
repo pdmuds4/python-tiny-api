@@ -9,7 +9,6 @@ from pgmpy.models import DiscreteBayesianNetwork
 from pgmpy.inference import VariableElimination
 
 from clients import SqliteClient
-from model._error import BaseError
 
 from model.baysapp.dto import *
 from model.baysapp.payload import *
