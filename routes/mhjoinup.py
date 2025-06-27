@@ -95,11 +95,11 @@ async def emit_management(
     return response_payload
 
 
-@sio.on('connect', namespace='/castcraft_webhook')
+@sio.on('connect', namespace=['/castcraft_webhook', '/board_management'])
 async def socket_connect(sid, env):
     print(f"Client {sid} connected")
 
 
-@sio.on('disconnect', namespace='/castcraft_webhook')
+@sio.on('disconnect', namespace={'/castcraft_webhook', '/board_management'})
 async def socket_disconnect(sid):
     print(f"Client {sid} disconnected")
