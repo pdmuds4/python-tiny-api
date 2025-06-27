@@ -53,14 +53,7 @@ async def api_key_authentication(request: Request, call_next):
                 }
             )
         else:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "message": "An unexpected error occurred.",
-                    "detail": str(e),
-                    "level": "unknown"
-                }
-            )
+            raise e
 
 
 
