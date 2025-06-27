@@ -9,5 +9,5 @@ class UserId(ValueObjectModel):
 
     @field_validator("value")
     def check_value(cls, v):
-        if len(v) != 24: raise ValueObjectError("UserIdは24文字固定長です")
+        if len(v) != 64: raise ValueObjectError("UserIdは64文字固定長です")
         return v
