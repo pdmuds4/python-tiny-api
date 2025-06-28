@@ -82,13 +82,21 @@ async def emit_management(
     )
 
     response_payload = EmitManagementPayload(
-        joiner=[{k: v["value"] for [k, v] in j.model_dump().items()} for j in request_dto.joiner],
-        waiter=[{k: v["value"] for [k, v] in w.model_dump().items()} for w in request_dto.waiter]
+        joiner=[{
+            "name": j.name.value,
+            "avatar": j.avatar.value,
+            "quest": j.quest.value
+        } for j in request_dto.joiner],
+        waiter=[{
+            "name": w.name.value,
+            "avatar": w.avatar.value,
+            "quest": w.quest.value
+        } for w in request_dto.waiter]
     )
 
     await sio.emit(
         user_id,
-        response_payload,
+        response_payload.model_dump(),
         namespace='/board_management'
     )
     
