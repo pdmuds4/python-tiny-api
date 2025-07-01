@@ -15,6 +15,10 @@ anyio==4.9.0
     # via starlette
 bidict==0.23.1
     # via python-socketio
+certifi==2025.6.15
+    # via requests
+charset-normalizer==3.4.2
+    # via requests
 click==8.2.1
     # via uvicorn
 fastapi==0.115.12
@@ -28,6 +32,7 @@ h11==0.16.0
     # via wsproto
 idna==3.10
     # via anyio
+    # via requests
 jinja2==3.1.6
     # via torch
 joblib==1.5.1
@@ -81,6 +86,8 @@ python-socketio==5.13.0
     # via python-tiny-api
 pytz==2025.2
     # via pandas
+requests==2.32.4
+    # via python-tiny-api
 scikit-learn==1.6.1
     # via pgmpy
 scipy==1.15.3
@@ -122,6 +129,8 @@ tzdata==2025.2
     # via pandas
 unidic-lite==1.0.8
     # via python-tiny-api
+urllib3==2.5.0
+    # via requests
 uvicorn==0.34.2
     # via python-tiny-api
 wsproto==1.2.0
