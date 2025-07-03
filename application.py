@@ -74,6 +74,7 @@ async def route():
 
 app.include_router(baysAppRouter)
 app.include_router(mhJoinUpRouter)
+app.include_router(discordBotWebHookRouter)
 
 
 if __name__=="__main__":
