@@ -12,7 +12,8 @@ class SendMessageService(ServiceModel):
             files = request["files"]
         )
 
-        if (response.status_code != 204):
+        print(response.status_code)
+        if (response.status_code != 200):
             raise UseCaseError(
                 message="DiscordWebhookのリクエストに失敗しました。",
                 detail=response.reason,
