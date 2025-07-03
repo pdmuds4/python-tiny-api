@@ -25,7 +25,7 @@ class SendLiveScheduleUseCase(UseCaseModel):
         
         send_message_request = {
             "data": {
-                "content": "画像やで"
+                "content": "@everyone \n今週の配信予定をお届けしますニャ！<:nico_nya:1390291846084952205><:nico_nya:1390291846084952205><:nico_nya:1390291846084952205>"
             },
             "files": {
                 "file": ("image.png", screen_shot_binary, "image/png")
