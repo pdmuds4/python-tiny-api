@@ -22,6 +22,7 @@ class TakeScreenShotService(ServiceModel):
                 "gotoOptions": {
                     "waitUntil": "networkidle2"
                 },
+                "waitForTimeout": 10000
             }),
             headers = {
                 'Content-Type': 'application/json'
