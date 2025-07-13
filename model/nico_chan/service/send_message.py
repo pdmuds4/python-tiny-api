@@ -16,6 +16,6 @@ class SendMessageService(ServiceModel):
         if (response.status_code != 200):
             raise UseCaseError(
                 message="DiscordWebhookのリクエストに失敗しました。",
-                detail=response.reason,
+                detail=response.content,
                 status_code=response.status_code
             )
