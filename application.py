@@ -67,8 +67,6 @@ async def route():
 
 app.include_router(baysAppRouter)
 app.include_router(mhJoinUpRouter)
-app.include_router(discordBotWebHookRouter)
-
 
 if __name__=="__main__":
     uvicorn.run("application:app", host="0.0.0.0", port=8000, reload=True)
