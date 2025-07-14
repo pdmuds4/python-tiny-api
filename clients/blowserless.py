@@ -1,5 +1,5 @@
 import requests, json
-from ..model._error import 
+from model._error import ClientError
 
 class BrowserlessClient:
     __apiKey: str
@@ -25,5 +25,11 @@ class BrowserlessClient:
         response_content = response.content
 
         if not response.ok:
-            raise 
+            raise ClientError(
+                '[BrowserlessClient] スクリーンショットの取得に失敗しました。',
+                response_content.decode(),
+                response.status_code
+            )
+        
+        return response_content
 
