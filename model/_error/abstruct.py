@@ -1,6 +1,6 @@
 from typing import Literal
 
-ERROR_LEVELS = Literal["ValueObject", "Entity", "Repository", "Service", "UseCase"]
+ERROR_LEVELS = Literal["ValueObject", "Entity", "Repository", "Service", "UseCase", "Client"]
 
 class BaseError(Exception):
     def __init__(self, message: str, detail: str, level: ERROR_LEVELS, status_code: int = 500):
